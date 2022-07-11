@@ -1,57 +1,97 @@
-# Project Name
+# Dapr pub/sub
 
-(short, 1-3 sentenced, description of the project)
+In this quickstart, you'll create a publisher microservice and a subscriber microservice to demonstrate how Dapr enables a publish-subcribe pattern. The publisher will generate messages of a specific topic, while subscribers will listen for messages of specific topics. See [Why Pub-Sub](#why-pub-sub) to understand when this pattern might be a good choice for your software architecture.
 
-## Features
+For more details about this quickstart example please see the [Pub-Sub Quickstart documentation](https://docs.dapr.io/getting-started/quickstarts/pubsub-quickstart/).
 
-This project framework provides the following features:
+Visit [this](https://docs.dapr.io/developing-applications/building-blocks/pubsub/) link for more information about Dapr and Pub-Sub.
 
-* Feature 1
-* Feature 2
-* ...
+> **Note:** This example leverages the Dapr client SDK.  If you are looking for the example using only HTTP `requests` [click here](../http).
 
-## Getting Started
+This quickstart includes one publisher:
 
-### Prerequisites
+- Node client message generator `checkout` 
 
-(ideally very short, if any)
+And one subscriber: 
+ 
+- Node subscriber `order-processor`
 
-- OS
-- Library version
-- ...
+### Run Node message subscriber with Dapr
 
-### Installation
+1. Install dependencies in a new terminal: 
 
-(ideally very short)
+<!-- STEP
+name: Install Node dependencies
+-->
 
-- npm install [package name]
-- mvn install
-- ...
+```bash
+cd ./order-processor
+npm install
+```
+<!-- END_STEP -->
+2. Run the Node subscriber app with Dapr: 
 
-### Quickstart
-(Add steps to get up and running quickly)
+<!-- STEP
+name: Run Node subscriber
+expected_stdout_lines:
+  - '== APP == Subscriber received: {"orderId":2}'
+  - "Exited App successfully"
+expected_stderr_lines:
+working_dir: ./order-processor
+output_match_mode: substring
+background: true
+sleep: 10
+-->
+    
+```bash
+dapr run --app-port 5001 --app-id order-processing --app-protocol http --dapr-http-port 3501 --components-path ../../../components -- npm run start
+```
 
-1. git clone [repository clone url]
-2. cd [repository name]
-3. ...
+<!-- END_STEP -->
 
+### Run Node message publisher with Dapr
 
-## Demo
+3. Install dependencies in a new terminal: 
 
-A demo app is included to show how to use the project.
+<!-- STEP
+name: Install Node dependencies
+-->
 
-To run the demo, follow these steps:
+```bash
+cd ./checkout
+npm install
+```
+<!-- END_STEP -->
+4. Run the Node publisher app with Dapr: 
 
-(Add steps to start up the demo)
+<!-- STEP
+name: Run Node publisher
+expected_stdout_lines:
+  - '== APP == Published data: {"orderId":2}'
+  - '== APP == Published data: {"orderId":3}'
+  - "Exited App successfully"
+expected_stderr_lines:
+working_dir: ./checkout
+output_match_mode: substring
+background: true
+sleep: 10
+-->
+    
+```bash
+dapr run --app-id checkout --app-protocol http --components-path ../../../components -- npm run start
+```
 
-1.
-2.
-3.
+<!-- END_STEP -->
 
-## Resources
+```bash
+dapr stop --app-id checkout
+dapr stop --app-id order-processor
+```
 
-(Any additional resources or related projects)
+5. Deploy to Azure for dev-test
 
-- Link to supporting information
-- Link to similar sample
-- ...
+NOTE: make sure you have Azure Dev CLI pre-reqs [here](https://github.com/Azure-Samples/todo-python-mongo-aca)
+
+```bash
+azd up
+```
