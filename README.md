@@ -16,6 +16,14 @@ And one subscriber:
  
 - Node subscriber `order-processor`
 
+### Pre-requisites
+For this example, you will need:
+- [Dapr CLI](https://docs.dapr.io/getting-started).
+- [Latest Node.js (v14.16.1 +)](https://nodejs.org/download/).
+<!-- IGNORE_LINKS -->
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+<!-- END_IGNORE -->
+
 ### Run Node message subscriber with Dapr
 
 1. Install dependencies in a new terminal: 
@@ -44,7 +52,7 @@ sleep: 10
 -->
     
 ```bash
-dapr run --app-port 5001 --app-id order-processing --app-protocol http --dapr-http-port 3501 --components-path ../../../components -- npm run start
+dapr run --app-port 5001 --app-id order-processing --app-protocol http --dapr-http-port 3501 --components-path ../components -- npm run start
 ```
 
 <!-- END_STEP -->
@@ -78,7 +86,7 @@ sleep: 10
 -->
     
 ```bash
-dapr run --app-id checkout --app-protocol http --components-path ../../../components -- npm run start
+dapr run --app-id checkout --app-protocol http --components-path ../components -- npm run start
 ```
 
 <!-- END_STEP -->

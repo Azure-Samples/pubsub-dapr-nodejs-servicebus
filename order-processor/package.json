@@ -12,6 +12,6 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "dapr-client": "^2.0.1"
+        "dapr-client": "^2.3.0"
     }
 }
