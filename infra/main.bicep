@@ -12,10 +12,10 @@ param location string
 @description('Id of the user or app to assign application roles')
 param principalId string = ''
 
-@description('The image name for the checkout service')
+@description('The image name for the checkout service, first time deployment will leverage nginx before the image is built locally and pushed to the container registry')
 param checkoutImageName string = ''
 
-@description('The image name for the order-processor service')
+@description('The image name for the order-processor service, first time deployment will leverage nginx before the image is built locally and pushed to the container registry')
 param ordersImageName string = ''
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
@@ -43,7 +43,6 @@ module resources './resources.bicep' = {
 }
 
 output AZURE_KEY_VAULT_ENDPOINT string = resources.outputs.AZURE_KEY_VAULT_ENDPOINT
-output SERVICEBUS_ENDPOINT string = resources.outputs.SERVICEBUS_ENDPONT
 output APPINSIGHTS_INSTRUMENTATIONKEY string = resources.outputs.APPINSIGHTS_INSTRUMENTATIONKEY
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = resources.outputs.AZURE_CONTAINER_REGISTRY_ENDPOINT
 output AZURE_CONTAINER_REGISTRY_NAME string = resources.outputs.AZURE_CONTAINER_REGISTRY_NAME

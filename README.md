@@ -8,7 +8,39 @@ Visit [this](https://docs.dapr.io/developing-applications/building-blocks/pubsub
 
 > **Note:** This example leverages the Dapr client SDK.  If you are looking for the example using only HTTP `requests` [click here](../http).
 
-This quickstart includes one publisher:
+### Prerequisites
+
+The following prerequisites are required to use this application.  Please ensure that you have them all installed locally.
+
+- [Azure Developer CLI](https://aka.ms/azure-dev/install)
+  - Windows:
+    ```powershell
+    powershell -c "Set-ExecutionPolicy Bypass Process -Force; irm 'https://aka.ms/install-azd.ps1' | iex"
+    ```
+  - Linux/MacOS:
+    ```
+    curl -fsSL https://aka.ms/install-azd.sh | bash 
+    ```
+- [Azure CLI (2.37.0+)](https://docs.microsoft.com/cli/azure/install-azure-cli)
+- [Dapr CLI](https://docs.dapr.io/getting-started).
+- [Latest Node.js (v14.16.1 +)](https://nodejs.org/download/).
+<!-- IGNORE_LINKS -->
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+<!-- END_IGNORE -->
+
+## Quickstart
+
+The fastest way for you to get this application up and running on Azure is to use the `azd up` command. This single command will create and configure all necessary Azure resources.
+
+Run the following command to initialize the project, provision Azure resources, build the application code in containers and push to a private Azure Container Registry to create a working application.
+
+```bash
+azd up -t Azure-Samples/pubsub-dapr-nodejs-servicebus
+```
+
+## Dapr application overview
+
+This sample includes one publisher:
 
 - Node client message generator `checkout` 
 
@@ -16,13 +48,6 @@ And one subscriber:
  
 - Node subscriber `order-processor`
 
-### Pre-requisites
-For this example, you will need:
-- [Dapr CLI](https://docs.dapr.io/getting-started).
-- [Latest Node.js (v14.16.1 +)](https://nodejs.org/download/).
-<!-- IGNORE_LINKS -->
-- [Docker Desktop](https://www.docker.com/products/docker-desktop)
-<!-- END_IGNORE -->
 
 ### Run Node message subscriber with Dapr
 
@@ -96,10 +121,10 @@ dapr stop --app-id checkout
 dapr stop --app-id order-processor
 ```
 
-5. Deploy to Azure for dev-test
+5. Re-Deploy to Azure for dev-test
 
 NOTE: make sure you have Azure Dev CLI pre-reqs [here](https://github.com/Azure-Samples/todo-python-mongo-aca)
 
 ```bash
-azd up
+azd deploy
 ```
