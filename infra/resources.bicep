@@ -1,22 +1,7 @@
 param name string
 param location string
 param principalId string = ''
-param resourceToken string
 param tags object
-param ordersImageName string = ''
-param checkoutImageName string = ''
-
-@description('The environment variables are used by both Publisher and subscriber applications')
-var pubSubAppEnvVars = [
-  {
-    name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-    value: containerAppsEnv.outputs.appInsightsInstrumentationKey
-  }
-  {
-    name: 'AZURE_KEY_VAULT_ENDPOINT'
-    value: keyVaultResources.outputs.AZURE_KEY_VAULT_ENDPOINT
-  }
-]
 
 @description('The container registry is used by azd to store your images')
 module registry './containerregistry.bicep' = {
@@ -24,7 +9,7 @@ module registry './containerregistry.bicep' = {
   params: {
     location: location
     tags: tags
-    resourceToken: resourceToken
+     nameseed: name
   }
 }
 
@@ -34,18 +19,11 @@ module keyVaultResources './keyvault.bicep' = {
   params: {
     location: location
     tags: tags
-    resourceToken: resourceToken
+    nameseed: name
   }
 }
 
-@description('We need to assign the Subscriber application identity permission to access Key Vault secrets')
-module keyVaultAccessPolicyApp './keyvaultpolicies.bicep' = {
-  name: 'keyvault-access-app'
-  params: {
-    keyVaultName: keyVaultResources.outputs.AZURE_KEY_VAULT_NAME
-    principalId: appSubscriber.outputs.userAssignedIdPrincipalId
-  }
-}
+
 
 @description('We also want to grant the developer access to the secrets through the PrincipalId parameter')
 module keyVaultAccessPolicyDev './keyvaultpolicies.bicep' = {
@@ -63,49 +41,16 @@ module containerAppsEnv 'br/public:app/dapr-containerapps-environment:1.0.1' = {
     location: location
     nameseed: name
     applicationEntityName: 'orders'
+    daprComponentName: 'orderpubsub'
     daprComponentType: 'pubsub.azure.servicebus'
     tags: tags
   }
 }
 
-@description('The Publishing app, Checkout')
-module appPublisher 'br/public:app/dapr-containerapp:1.0.1' = {
-  name: 'publisher'
-  params: {
-    location: location
-    containerAppEnvName: containerAppsEnv.outputs.containerAppEnvironmentName
-    containerAppName: 'publisher-checkout'
-    containerImage: !empty(checkoutImageName) ? checkoutImageName : 'nginx:latest'
-    azureContainerRegistry: registry.outputs.AZURE_CONTAINER_REGISTRY_NAME
-    environmentVariables: pubSubAppEnvVars
-    enableIngress: false
-    tags: union(tags, {
-      'azd-service-name': 'checkout'
-    })
-  }
-}
-
-@description('The Subscribing app, Orders')
-module appSubscriber 'br/public:app/dapr-containerapp:1.0.1' = {
-  name: 'subscriber'
-  params: {
-    location: location
-    containerAppEnvName: containerAppsEnv.outputs.containerAppEnvironmentName
-    containerAppName: 'subscriber-orders'
-    containerImage:  !empty(ordersImageName) ? ordersImageName : 'nginx:latest'
-    azureContainerRegistry: registry.outputs.AZURE_CONTAINER_REGISTRY_NAME
-    environmentVariables: pubSubAppEnvVars
-    targetPort: 5001
-    tags: union(tags, {
-      'azd-service-name': 'orders'
-    })
-  }
-}
-
 output AZURE_COSMOS_CONNECTION_STRING_KEY string = 'AZURE-COSMOS-CONNECTION-STRING'
 output AZURE_KEY_VAULT_ENDPOINT string = keyVaultResources.outputs.AZURE_KEY_VAULT_ENDPOINT
+output AZURE_KEY_VAULT_NAME string = keyVaultResources.outputs.AZURE_KEY_VAULT_NAME
 output APPINSIGHTS_INSTRUMENTATIONKEY string = containerAppsEnv.outputs.appInsightsInstrumentationKey
 output AZURE_CONTAINER_REGISTRY_ENDPOINT string = registry.outputs.AZURE_CONTAINER_REGISTRY_ENDPOINT
 output AZURE_CONTAINER_REGISTRY_NAME string = registry.outputs.AZURE_CONTAINER_REGISTRY_NAME
-output CHECKOUT_APP_URI string = appPublisher.outputs.containerAppFQDN
-output ORDERS_APP_URI string = appSubscriber.outputs.containerAppFQDN
+output AZURE_CONTAINERAPPS_ENVIRONMENT_NAME string = containerAppsEnv.outputs.containerAppEnvironmentName

@@ -1,6 +1,6 @@
 # Dapr pub/sub
 
-In this quickstart, you'll create a publisher microservice and a subscriber microservice to demonstrate how Dapr enables a publish-subcribe pattern. The publisher will generate messages of a specific topic, while subscribers will listen for messages of specific topics. See [Why Pub-Sub](#why-pub-sub) to understand when this pattern might be a good choice for your software architecture.
+In this quickstart, you'll create a publisher microservice and a subscriber microservice to demonstrate how Dapr enables a publish-subscribe pattern. The publisher will generate messages of a specific topic, while subscribers will listen for messages of specific topics. See [Why Pub-Sub](#why-pub-sub) to understand when this pattern might be a good choice for your software architecture.
 
 For more details about this quickstart example please see the [Pub-Sub Quickstart documentation](https://docs.dapr.io/getting-started/quickstarts/pubsub-quickstart/).
 
@@ -15,11 +15,11 @@ The following prerequisites are required to use this application.  Please ensure
 - [Azure Developer CLI](https://aka.ms/azure-dev/install)
   - Windows:
     ```powershell
-    powershell -c "Set-ExecutionPolicy Bypass Process -Force; irm 'https://aka.ms/install-azd.ps1' | iex"
+    powershell -ex AllSigned -c "Invoke-RestMethod 'https://aka.ms/install-azd.ps1' | Invoke-Expression"
     ```
   - Linux/MacOS:
     ```
-    curl -fsSL https://aka.ms/install-azd.sh | bash 
+    curl -fsSL https://aka.ms/install-azd.sh | bash
     ```
 - [Azure CLI (2.37.0+)](https://docs.microsoft.com/cli/azure/install-azure-cli)
 - [Dapr CLI](https://docs.dapr.io/getting-started).
@@ -30,9 +30,9 @@ The following prerequisites are required to use this application.  Please ensure
 
 ## Quickstart
 
-The fastest way for you to get this application up and running on Azure is to use the `azd up` command. This single command will create and configure all necessary Azure resources.
+The fastest way for you to get this application up and running on Azure is to use the `azd up` command. This single command will create and configure all necessary Azure & local resources.
 
-Run the following command to initialize the project, provision Azure resources, build the application code in containers and push to a private Azure Container Registry to create a working application.
+Run the following command to initialize the project, provision the core Azure resources, build the application code in containers and push to a private Azure Container Registry to create a working application.
 
 ```bash
 azd up -t Azure-Samples/pubsub-dapr-nodejs-servicebus

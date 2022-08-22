@@ -1,9 +1,9 @@
 param location string
-param resourceToken string
+param nameseed string
 param tags object
 
 resource keyVault 'Microsoft.KeyVault/vaults@2021-10-01' = {
-  name: 'kv${resourceToken}'
+  name: 'kv${nameseed}${uniqueString(resourceGroup().id, location)}'
   location: location
   tags: tags
   properties: {

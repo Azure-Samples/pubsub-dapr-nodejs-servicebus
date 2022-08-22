@@ -10,12 +10,6 @@
     },
     "principalId": {
       "value": "${AZURE_PRINCIPAL_ID}"
-    },
-    "checkoutImageName": {
-      "value": "${SERVICE_CHECKOUT_IMAGE_NAME}"
-    },
-    "ordersImageName": {
-      "value": "${SERVICE_ORDERS_IMAGE_NAME}"
     }
   }
 }
