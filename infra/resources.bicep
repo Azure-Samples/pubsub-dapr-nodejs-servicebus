@@ -5,7 +5,7 @@ param tags object
 
 @description('The container registry is used by azd to store your images')
 module registry './containerregistry.bicep' = {
-  name: 'container-registry'
+  name: 'containerRegistry-resources'
   params: {
     location: location
     tags: tags
@@ -34,7 +34,7 @@ module keyVaultAccessPolicyDev './keyvaultpolicies.bicep' = {
 
 @description('The container apps environment is where the applications will be deployed to')
 module containerAppsEnv 'br/public:app/dapr-containerapps-environment:1.0.1' = {
-  name: 'caEnv-resources'
+  name: 'caenv-resources'
   params: {
     location: location
     nameseed: resourceToken

@@ -12,20 +12,18 @@ param location string
 @description('Id of the user or app to assign application roles')
 param principalId string = ''
 
-resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name: '${name}-rg'
-  location: location
-}
-
-@description('Resource token is used to uniformly name and ensure global name uniqueness for those resources that require it')
 var resourceToken = toLower(uniqueString(subscription().id, name, location))
+var tags = { 'azd-env-name': name }
+var abbrs = loadJsonContent('abbreviations.json')
 
-var tags = {
-  'azd-env-name': name
+resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  name: '${abbrs.resourcesResourceGroups}${name}'
+  location: location
+  tags: tags
 }
 
 module resources './resources.bicep' = {
-  name: 'resources-${name}'
+  name: 'resources'
   scope: resourceGroup
   params: {
     location: location

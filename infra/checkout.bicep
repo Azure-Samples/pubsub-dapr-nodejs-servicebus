@@ -1,11 +1,14 @@
-param location string
 param name string
+param location string
 param containerAppEnvironmentName string
 param containerRegistryName string
 param appInsightsInstrumentationKey string
 param keyVaultName string
 param imageName string
-param tags object = {}
+
+var resourceToken = toLower(uniqueString(subscription().id, name, location))
+var tags = { 'azd-env-name': name }
+var abbrs = loadJsonContent('abbreviations.json')
 
 @description('These same environment variables are used by both Publisher and subscriber applications')
 var pubSubAppEnvVars = [
@@ -29,14 +32,13 @@ module appPublisher 'br/public:app/dapr-containerapp:1.0.1' = {
   params: {
     location: location
     containerAppEnvName: containerAppEnvironmentName
-    containerAppName: '${name}checkout'
+
+    containerAppName: '${abbrs.appContainerApps}-checkout-${resourceToken}'
     containerImage: imageName
     azureContainerRegistry: containerRegistryName
     environmentVariables: pubSubAppEnvVars
     enableIngress: false
-    tags: union(tags, {
-      'azd-service-name': 'checkout'
-    })
+    tags: union(tags, {'azd-service-name': 'checkout'})
   }
 }
 
