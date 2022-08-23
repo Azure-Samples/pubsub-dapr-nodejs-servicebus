@@ -1,7 +1,7 @@
 param keyVaultName string
 param principalId string
 
-resource keyVaultAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2021-10-01' = if (!empty(principalId)) {
+resource keyVaultAccessPolicies 'Microsoft.KeyVault/vaults/accessPolicies@2022-07-01' = if (!empty(principalId)) {
   name: '${keyVaultName}/add'
   properties: {
     accessPolicies: [

@@ -35,7 +35,7 @@ The fastest way for you to get this application up and running on Azure is to us
 Run the following command to initialize the project, provision the core Azure resources, build the application code in containers and push to a private Azure Container Registry to create a working application.
 
 ```bash
-azd up -t Azure-Samples/pubsub-dapr-nodejs-servicebus
+azd up -t pubsub-dapr-nodejs-servicebus
 ```
 
 ## Dapr application overview

@@ -5,7 +5,7 @@
     "location": {
       "value": "${AZURE_LOCATION}"
     },
-    "nameseed": {
+    "name": {
       "value": "${AZURE_ENV_NAME}"
     },
     "containerAppEnvironmentName": {

@@ -17,6 +17,9 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
 }
 
+@description('Resource token is used to uniformly name and ensure global name uniqueness for those resources that require it')
+var resourceToken = toLower(uniqueString(subscription().id, name, location))
+
 var tags = {
   'azd-env-name': name
 }
@@ -25,9 +28,9 @@ module resources './resources.bicep' = {
   name: 'resources-${name}'
   scope: resourceGroup
   params: {
-    name: name
     location: location
     principalId: principalId
+    resourceToken: resourceToken
     tags: tags
   }
 }

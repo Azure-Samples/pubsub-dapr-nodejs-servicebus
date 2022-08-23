@@ -1,6 +1,6 @@
-param name string
 param location string
 param principalId string = ''
+param resourceToken string
 param tags object
 
 @description('The container registry is used by azd to store your images')
@@ -9,7 +9,7 @@ module registry './containerregistry.bicep' = {
   params: {
     location: location
     tags: tags
-     nameseed: name
+    resourceToken: resourceToken
   }
 }
 
@@ -19,11 +19,9 @@ module keyVaultResources './keyvault.bicep' = {
   params: {
     location: location
     tags: tags
-    nameseed: name
+    resourceToken: resourceToken
   }
 }
-
-
 
 @description('We also want to grant the developer access to the secrets through the PrincipalId parameter')
 module keyVaultAccessPolicyDev './keyvaultpolicies.bicep' = {
@@ -39,7 +37,7 @@ module containerAppsEnv 'br/public:app/dapr-containerapps-environment:1.0.1' = {
   name: 'caEnv-resources'
   params: {
     location: location
-    nameseed: name
+    nameseed: resourceToken
     applicationEntityName: 'orders'
     daprComponentName: 'orderpubsub'
     daprComponentType: 'pubsub.azure.servicebus'

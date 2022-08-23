@@ -1,5 +1,5 @@
 param location string
-param nameseed string
+param name string
 param containerAppEnvironmentName string
 param containerRegistryName string
 param appInsightsInstrumentationKey string
@@ -15,11 +15,11 @@ var pubSubAppEnvVars = [
   }
   {
     name: 'AZURE_KEY_VAULT_ENDPOINT'
-    value: keyvault.properties.vaultUri
+    value: keyVault.properties.vaultUri
   }
 ]
 
-resource keyvault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
+resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   name: keyVaultName
 }
 
@@ -29,7 +29,7 @@ module appSubscriber 'br/public:app/dapr-containerapp:1.0.1' = {
   params: {
     location: location
     containerAppEnvName: containerAppEnvironmentName
-    containerAppName: '${nameseed}orders'
+    containerAppName: '${name}orders'
     containerImage:  imageName
     azureContainerRegistry: containerRegistryName
     environmentVariables: pubSubAppEnvVars

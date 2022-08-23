@@ -1,9 +1,11 @@
 param location string
-param nameseed string
+param resourceToken string
 param tags object
 
-resource keyVault 'Microsoft.KeyVault/vaults@2021-10-01' = {
-  name: 'kv${nameseed}${uniqueString(resourceGroup().id, location)}'
+var abbrs = loadJsonContent('abbreviations.json')
+
+resource keyVault 'Microsoft.KeyVault/vaults@2022-07-01' = {
+  name: '${abbrs.keyVaultVaults}${resourceToken}'
   location: location
   tags: tags
   properties: {
