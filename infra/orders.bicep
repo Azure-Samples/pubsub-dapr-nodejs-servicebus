@@ -32,7 +32,7 @@ module appSubscriber 'br/public:app/dapr-containerapp:1.0.1' = {
   params: {
     location: location
     containerAppEnvName: containerAppEnvironmentName
-    containerAppName: '${abbrs.appContainerApps}-orders-${resourceToken}'
+    containerAppName: '${abbrs.appContainerApps}orders-${resourceToken}'
     containerImage:  imageName
     azureContainerRegistry: containerRegistryName
     environmentVariables: pubSubAppEnvVars

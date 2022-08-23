@@ -32,8 +32,7 @@ module appPublisher 'br/public:app/dapr-containerapp:1.0.1' = {
   params: {
     location: location
     containerAppEnvName: containerAppEnvironmentName
-
-    containerAppName: '${abbrs.appContainerApps}-checkout-${resourceToken}'
+    containerAppName: '${abbrs.appContainerApps}checkout-${resourceToken}'
     containerImage: imageName
     azureContainerRegistry: containerRegistryName
     environmentVariables: pubSubAppEnvVars
