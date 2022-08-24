@@ -5,7 +5,7 @@ param tags object
 
 @description('The container registry is used by azd to store your images')
 module registry './containerregistry.bicep' = {
-  name: 'containerRegistry-resources'
+  name: 'container-registry-resources'
   params: {
     location: location
     tags: tags
