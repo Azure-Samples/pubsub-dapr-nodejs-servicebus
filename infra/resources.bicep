@@ -2,6 +2,8 @@ param location string
 param principalId string = ''
 param resourceToken string
 param tags object
+param daprComponentName string = 'orderpubsub'
+param pubsubTopicName string = 'orders'
 
 @description('The container registry is used by azd to store your images')
 module registry './containerregistry.bicep' = {
@@ -38,8 +40,8 @@ module containerAppsEnv 'br/public:app/dapr-containerapps-environment:1.0.1' = {
   params: {
     location: location
     nameseed: resourceToken
-    applicationEntityName: 'orders'
-    daprComponentName: 'orderpubsub'
+    applicationEntityName: pubsubTopicName
+    daprComponentName: daprComponentName
     daprComponentType: 'pubsub.azure.servicebus'
     tags: tags
   }
