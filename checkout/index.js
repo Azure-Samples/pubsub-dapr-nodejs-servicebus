@@ -8,16 +8,22 @@ const PUBSUB_TOPIC = "orders";
 async function main() {
   const client = new DaprClient(DAPR_HOST, DAPR_HTTP_PORT);
 
-  for(var i = 1; i <= 10; i++) {
-    const order = {orderId:  i};
+  while (true) {
+    for (var i = 1; i <= 20; i++) {
+      const order = {
+        orderId: i
+      };
 
-    // Publish an event using Dapr pub/sub
-    await client.pubsub.publish(PUBSUB_NAME, PUBSUB_TOPIC, order);
-    console.log("Published data: " + JSON.stringify(order));
+      // Publish an event using Dapr pub/sub
+      await client.pubsub.publish(PUBSUB_NAME, PUBSUB_TOPIC, order);
+      console.log("Published data: " + JSON.stringify(order));
 
-    await sleep(1000);
+      await sleep(1000);
+    }
+    await sleep(20000);
   }
 }
+
 async function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
