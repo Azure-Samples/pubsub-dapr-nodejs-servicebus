@@ -8,9 +8,9 @@ services:
     project: checkout
     language: js
     host: containerapp
-    module: app/checkout
+    module: app/publisher
   orders:
     project: order-processor
     language: js
     host: containerapp
-    module: app/orders
+    module: app/subscriber

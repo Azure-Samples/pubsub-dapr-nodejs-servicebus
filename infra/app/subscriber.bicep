@@ -5,15 +5,15 @@ param containerAppsEnvironmentName string
 param containerRegistryName string
 param imageName string = ''
 param name string = ''
-param serviceName string = 'checkout'
+param serviceName string = 'orders'
 param managedIdentityName string = ''
 
-module checkout '../core/host/container-app.bicep' = {
+module subscriber '../core/host/container-app.bicep' = {
   name: '${serviceName}-container-app-module'
   params: {
     name: name
     location: location
-    tags: union(tags, { 'azd-service-name': 'checkout' })
+    tags: union(tags, { 'azd-service-name': 'orders' })
     containerAppsEnvironmentName: containerAppsEnvironmentName
     containerRegistryName: containerRegistryName
     containerCpuCoreCount: '1.0'
@@ -21,12 +21,13 @@ module checkout '../core/host/container-app.bicep' = {
     imageName: !empty(imageName) ? imageName : 'nginx:latest'
     daprEnabled: true
     containerName: serviceName
-    ingressEnabled: false
-    managedIdentityEnabled: true
-    managedIdentityName: managedIdentityName
+    targetPort: 5001
+    identityType: 'UserAssigned'
+    identityName: managedIdentityName
   }
 }
 
 
-output SERVICE_CHECKOUT_IMAGE_NAME string = checkout.outputs.imageName
-output SERVICE_CHECKOUT_NAME string = checkout.outputs.name
+output SUBSCRIBER_URI string = subscriber.outputs.uri
+output SERVICE_SUBSCRIBER_IMAGE_NAME string = subscriber.outputs.imageName
+output SERVICE_SUBSCRIBER_NAME string = subscriber.outputs.name
