@@ -33,6 +33,9 @@ param resourceGroupName string = ''
 // "resourceGroupName": {
 //      "value": "myGroupName"
 // }
+param vnetName string = 'vnet-ca'
+param vnetInternal bool = true
+param vnetPrefix string = '10.0.0.0/16'
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
@@ -80,7 +83,6 @@ module serviceBusAccess './app/access.bicep' = {
   }
 }
 
-
 // Shared App Env with Dapr configuration for db
 module appEnv './app/app-env.bicep' = {
   name: 'app-env'
@@ -94,6 +96,31 @@ module appEnv './app/app-env.bicep' = {
     applicationInsightsName: monitoring.outputs.applicationInsightsName
     daprEnabled: true
     managedIdentityClientId: serviceBusAccess.outputs.managedIdentityClientlId
+    vnetName: vnet.outputs.vnetName
+    vnetInernal: vnetInternal 
+  }
+}
+
+var containerAppsSubnet = {
+  name: 'ContainerAppsSubnet'
+  properties: {
+    addressPrefix: '10.0.0.0/23'
+  }
+}
+
+var subnets = [
+  containerAppsSubnet
+]
+
+// Deploy an Azure Virtual Network 
+module vnet 'core/networking/vnet.bicep' = {
+  name: '${deployment().name}--vnet'
+  scope: rg
+  params: {
+    location: location
+    vnetName: vnetName
+    vnetPrefix: vnetPrefix
+    subnets: subnets
   }
 }
 
